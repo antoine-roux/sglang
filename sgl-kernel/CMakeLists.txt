@@ -272,6 +272,8 @@ set(SOURCES
     "csrc/moe/marlin_moe_wna16/kernel_fp16_ku4.cu"
     "csrc/moe/marlin_moe_wna16/kernel_fp16_ku4b8.cu"
     "csrc/moe/marlin_moe_wna16/kernel_fp16_ku8b128.cu"
+    "csrc/mamba/causal_conv1d/causal_conv1d.cu"
+    "csrc/mamba/mamba_ssm/selective_scan_fwd.cu"
     "csrc/moe/moe_align_kernel.cu"
     "csrc/moe/moe_fused_gate.cu"
     "csrc/moe/moe_topk_softmax_kernels.cu"
