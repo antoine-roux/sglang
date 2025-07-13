@@ -108,6 +108,7 @@ from sglang.srt.managers.schedule_batch import (
     Req,
     ScheduleBatch,
     global_server_args_dict,
+    global_scheduler_batch_dict,
 )
 from sglang.srt.managers.schedule_policy import (
     AddReqResult,
@@ -787,7 +788,10 @@ class Scheduler(
             self.cur_batch = batch
 
             if batch:
+                #(yizhang2077) hook manba here
+                global_scheduler_batch_dict["request_ids_to_seq_ids"].clear()
                 result = self.run_batch(batch)
+                global_scheduler_batch_dict["finished_requests_ids"].clear()
                 self.process_batch_result(batch, result)
             else:
                 # When the server is idle, do self-check and re-init some states
@@ -1771,6 +1775,10 @@ class Scheduler(
         # Run forward
         if self.is_generation:
             if self.spec_algorithm.is_none():
+                #(yizhang2077) hook Mamba here
+                for req in batch.reqs:
+                    global_scheduler_batch_dict["request_ids_to_seq_ids"][req.rid] = [0]
+
                 model_worker_batch = batch.get_model_worker_batch()
 
                 # update the consumer index of hicache to the running batch
