@@ -1076,6 +1076,10 @@ class ModelRunner:
         max_num_token = int(rest_memory * (1 << 30) // cell_size)
         return max_num_token
 
+    @property
+    def is_hybrid_gdn(self):
+        return "Qwen3HybridMoEForCausalLM" in self.model_config.hf_config.architectures
+
     def set_num_token_hybrid(self):
         if (
             "Llama4ForConditionalGeneration"
@@ -1668,6 +1672,8 @@ class ModelRunner:
         if not skip_attn_backend_init:
             self.attn_backend.init_forward_metadata(forward_batch)
         # FIXME: add pp_proxy_tensors arg to all models
+        if self.is_hybrid_gdn:
+            forward_batch.extend_start_loc = self.model.prepare_extend_start_loc(forward_batch)
         kwargs = {}
         if self.support_pp:
             kwargs["pp_proxy_tensors"] = pp_proxy_tensors
@@ -1694,6 +1700,8 @@ class ModelRunner:
             kwargs["input_embeds"] = forward_batch.input_embeds.bfloat16()
         if not self.is_generation:
             kwargs["get_embedding"] = True
+        if self.is_hybrid_gdn:
+            forward_batch.extend_start_loc = self.model.prepare_extend_start_loc(forward_batch)
         return self.model.forward(
             forward_batch.input_ids,
             forward_batch.positions,
