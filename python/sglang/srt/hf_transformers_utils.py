@@ -41,8 +41,8 @@ from sglang.srt.configs import (
     ExaoneConfig,
     KimiVLConfig,
     MultiModalityConfig,
-    Step3VLConfig,
     Qwen3HybridMoeConfig,
+    Step3VLConfig,
 )
 from sglang.srt.configs.internvl import InternVLChatConfig
 from sglang.srt.connector import create_remote_connector
