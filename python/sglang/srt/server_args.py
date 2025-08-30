@@ -1369,6 +1369,7 @@ class ServerArgs:
             "trtllm_mla",
             "trtllm_mha",
             "dual_chunk_flash_attn",
+            "hybrid_linear_attn",
             # AMD specific
             "aiter",
             "wave",
